@@ -32,9 +32,9 @@ class CampaignInfo
   }
 }
 
-$accessToken = '---xxx---xxx';
-$cid = 'xxx---';
-$eid = '---xxx';
+$accessToken = 'xxx---xxx---';
+$cid = '---xxx';
+$eid = 'xxx---';
 
 $campaign = new CampaignInfo($accessToken, $cid);
 $campaign->getEvent($eid);
