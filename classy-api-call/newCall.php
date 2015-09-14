@@ -12,8 +12,6 @@ class CampaignInfo
     $this->cid = $cid;
   }
 
-
-
   public function getEvent($eid) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, "www.classy.org/api1/campaigns?token=" . $this->accessToken . "&cid=" . $this->cid . "&eid=" . $eid);
@@ -23,28 +21,26 @@ class CampaignInfo
     echo curl_error($ch);
     curl_close ($ch);
 
+    global $jsonResult;
     $jsonResult = json_decode($result, true);
-    // var_dump($jsonResult);
 
-    $totalRaised = $jsonResult['campaigns'][0]['total_raised'];
-    $goal = $jsonResult['campaigns'][0]['goal'];
   }
 }
 
-$accessToken = 'xxx---xxx---';
-$cid = '---xxx';
-$eid = $_POST["eid"];
+function jsonReturn( $atts ) {
+  $campaign1 = new CampaignInfo('xxx---xxx---', '---xxx');
+  $campaign1->getEvent(xxx---);
 
-$campaign = new CampaignInfo($accessToken, $cid);
-$campaign->getEvent($eid);
+  global $jsonResult;
+
+  $a = shortcode_atts( array(
+      'totalRaised' => $jsonResult['campaigns'][0]['total_raised'],
+      'goal' => $jsonResult['campaigns'][0]['total_raised'],
+  ), $atts );
+
+  return "total raised = {$a['totalRaised']}, goal = {$a['goal']}";
+}
+
+add_shortcode('campaign_one', 'jsonReturn' );
 
 ?>
-
-
-
-
-
-
-
-
-
