@@ -27,20 +27,34 @@ class CampaignInfo
   }
 }
 
-function jsonReturn( $atts ) {
+// a crass way of retrieving my variables.
+// needs to be refactored. made more dynamic
+
+function campaign_one_total_return( $atts ) {
   $campaign1 = new CampaignInfo('xxx---xxx---', '---xxx');
   $campaign1->getEvent(xxx---);
-
   global $jsonResult;
-
   $a = shortcode_atts( array(
       'totalRaised' => $jsonResult['campaigns'][0]['total_raised'],
+  ), $atts );
+
+  return "{$a['totalRaised']}";
+}
+
+function campaign_one_goal_return( $atts ) {
+  $campaign1 = new CampaignInfo('xxx---xxx---', '---xxx');
+  $campaign1->getEvent(xxx---);
+  global $jsonResult;
+  $a = shortcode_atts( array(
       'goal' => $jsonResult['campaigns'][0]['total_raised'],
   ), $atts );
 
-  return "total raised = {$a['totalRaised']}, goal = {$a['goal']}";
+  return "{$a['goal']}";
 }
 
-add_shortcode('campaign_one', 'jsonReturn' );
+
+
+add_shortcode('campaign_one_total', 'campaign_one_total_return' );
+add_shortcode('campaign_one_goal', 'campaign_one_goal_return' );
 
 ?>
