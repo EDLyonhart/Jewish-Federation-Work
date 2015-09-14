@@ -31,7 +31,7 @@ class CampaignInfo
   }
 }
 
-$accessToken = 'xxx---xxx---';
+$accessToken = 'xxx---xxx';
 $cid = '---xxx';
 $eid = $_POST["eid"];
 
