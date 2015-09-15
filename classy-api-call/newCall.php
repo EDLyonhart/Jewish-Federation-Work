@@ -27,34 +27,36 @@ class CampaignInfo
   }
 }
 
-// a crass way of retrieving my variables.
-// needs to be refactored. made more dynamic
+function campaign_one_return( $atts ) {
+  $campaign1 = new CampaignInfo('xxx---xxx---', 'xxx---');
+  $campaign1->getEvent(---xxx);
 
-function campaign_one_total_return( $atts ) {
-  $campaign1 = new CampaignInfo('xxx---xxx---', '---xxx');
-  $campaign1->getEvent(xxx---);
   global $jsonResult;
-  $a = shortcode_atts( array(
-      'totalRaised' => $jsonResult['campaigns'][0]['total_raised'],
-  ), $atts );
+  $campaign_one_parse = $jsonResult['campaigns'][0];
+  extract(shortcode_atts(array(
+    'key' => 'name'
+    ), $atts));
 
-  return "{$a['totalRaised']}";
+  return $campaign_one_parse[$key];
 }
 
-function campaign_one_goal_return( $atts ) {
-  $campaign1 = new CampaignInfo('xxx---xxx---', '---xxx');
-  $campaign1->getEvent(xxx---);
-  global $jsonResult;
-  $a = shortcode_atts( array(
-      'goal' => $jsonResult['campaigns'][0]['total_raised'],
-  ), $atts );
-
-  return "{$a['goal']}";
-}
+add_shortcode('campaign_one', 'campaign_one_return' );
 
 
+/*
 
-add_shortcode('campaign_one_total', 'campaign_one_total_return' );
-add_shortcode('campaign_one_goal', 'campaign_one_goal_return' );
+Here is what the shotcodes will look like this:
+
+[campaign_one key="name"]
+[campaign_one key="total_raised]
+[campaign_one key="goal"]
+
+*/
 
 ?>
+
+
+
+
+
+
