@@ -1,48 +1,52 @@
 <?php
 
-// on page load run this function
 
-function display_user_classy_status() {
+class GetMID
+{
+  //  Mask values
+  private $accessToken;
+  private $cid;
+
+  public function __construct($accessToken, $cid) {
+    $this->accessToken = $accessToken;
+    $this->cid = $cid;
+  }
+
+  public function getMember($email) {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "www.classy.org/api1/donations?token=" . $this->accessToken . "&cid=" . $this->cid . "&email=" . $email);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+    $result = curl_exec ($ch);
+    echo curl_error($ch);
+    curl_close ($ch);
+    $jsonResult = json_decode($result, true);
+
+    if ($jsonResults['status_code'] != 'SUCCESS' {
+
+      return;
+
+    } elseif ($jsonResults['status_code'] == 'SUCCESS') {
+
+      // add $mid to user_meta
+      $mid = $jsonResults['donations'][0]['member_id']
+      add_user_meta( $user_id, $classy_mid, $mid );
+    
+    }
+
+    } else {
+      return 'When donating to any of our fundraisers through Classy.org, please donate using the email address ' . $current_user->user_emial . ' so that we can properly show you your donation history';
+    }
+  }
+
+
+
+function get_user_classy_mid() {
 
   $current_user = wp_get_current_user();
   $user_id = wp_get_current_user_id();
 
   if ( !user_meta($current_user->classy_mid) ) {
-    // query Classy's "/fundraisers" using user_email as an agument
-    // if STATUS_CODE return !SUCCESS {
-
-    class GetMID
-    {
-      //  Mask values
-      private $accessToken;
-      private $cid;
-
-      public function __construct($accessToken, $cid) {
-        $this->accessToken = $accessToken;
-        $this->cid = $cid;
-      }
-
-      public function getMember($email) {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "www.classy.org/api1/donations?token=" . $this->accessToken . "&cid=" . $this->cid . "&email=" . $email);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-        $result = curl_exec ($ch);
-        echo curl_error($ch);
-        curl_close ($ch);
-        $jsonResult = json_decode($result, true);
-
-        if ($jsonResults['status_code'] == 'SUCCESS') {
-
-          // add $mid to user_meta
-          $mid = $jsonResults['donations'][0]['member_id']
-          add_user_meta( $user_id, $classy_mid, $mid );
-
-        } else {
-          return 'When donating to any of our fundraisers through Classy.org, please donate using the email address ' . $current_user->user_emial . ' so that we can properly show you your donation history';
-        }
-      }
-    }
 
     $accessToken = 'xxx---xxx';
     $cid = '---xxx';
@@ -50,6 +54,10 @@ function display_user_classy_status() {
 
     $newMid = new GetMID($accessToken, $cid)
     $newMid = getMember($email)
+
+    }
+
+
 
 
   } else {

@@ -24,14 +24,20 @@ class CampaignInfo
     global $jsonResult;
     $jsonResult = json_decode($result, true);
 
+    if ($jsonResults['status_code'] != 'SUCCESS' {
+      return;
+    }
+
   }
 }
 
 function campaign_one_return( $atts ) {
-  $campaign1 = new CampaignInfo('xxx---xxx---', 'xxx---');
+  // rename away from individual campaigns.
+  $campaign_client = new CampaignInfo('xxx---xxx---', 'xxx---');
   $campaign1->getEvent(---xxx);
 
   global $jsonResult;
+
   $campaign_one_parse = $jsonResult['campaigns'][0];
   extract(shortcode_atts(array(
     'key' => 'name'
