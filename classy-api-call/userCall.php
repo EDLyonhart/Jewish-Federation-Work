@@ -24,7 +24,7 @@ function display_user_classy_status() {
 
       public function getMember($email) {
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "www.classy.org/api1/campaigns?token=" . $this->accessToken . "&cid=" . $this->cid . "&email=" . $email);
+        curl_setopt($ch, CURLOPT_URL, "www.classy.org/api1/donations?token=" . $this->accessToken . "&cid=" . $this->cid . "&email=" . $email);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
         $result = curl_exec ($ch);
