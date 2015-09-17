@@ -1,66 +1,124 @@
 <?php
 
-class UserInfo
-{
+// on page load run this function
 
-  //  Mask values
-  private $accessToken;
-  private $cid;
+function display_user_classy_status() {
 
-  public function __construct($accessToken, $cid) {
-    $this->accessToken = $accessToken;
-    $this->cid = $cid;
-  }
+  $current_user = wp_get_current_user();
+  $user_id = wp_get_current_user_id();
 
-  public function getUser($email) {
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, "www.classy.org/api1/fundraisers?token=" . $this->accessToken . "&cid=" . $this->cid . "&mid=" . $mid);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  if ( !user_meta($current_user->classy_mid) ) {
+    // query Classy's "/fundraisers" using user_email as an agument
+    // if STATUS_CODE return !SUCCESS {
 
-    $result = curl_exec ($ch);
-    echo curl_error($ch);
-    curl_close ($ch);
+    class GetMID
+    {
+      //  Mask values
+      private $accessToken;
+      private $cid;
 
-    global $jsonResult;
-    $jsonResult = json_decode($result, true);
+      public function __construct($accessToken, $cid) {
+        $this->accessToken = $accessToken;
+        $this->cid = $cid;
+      }
 
+      public function getMember($email) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "www.classy.org/api1/campaigns?token=" . $this->accessToken . "&cid=" . $this->cid . "&email=" . $email);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        $result = curl_exec ($ch);
+        echo curl_error($ch);
+        curl_close ($ch);
+        $jsonResult = json_decode($result, true);
+
+        if ($jsonResults['status_code'] == 'SUCCESS') {
+
+          // add $mid to user_meta
+          $mid = $jsonResults['donations'][0]['member_id']
+          add_user_meta( $user_id, $classy_mid, $mid );
+
+        } else {
+          return 'When donating to any of our fundraisers through Classy.org, please donate using the email address ' . $current_user->user_emial . ' so that we can properly show you your donation history';
+        }
+      }
+    }
+
+    $accessToken = 'xxx---xxx';
+    $cid = '---xxx';
+    $email = $current_user->user_emial;
+
+    $newMid = new GetMID($accessToken, $cid)
+    $newMid = getMember($email)
+
+
+  } else {
+
+    // query API using $mid in /donations
+
+    class UserInfo
+    {
+
+      //  Mask values
+      private $accessToken;
+      private $cid;
+
+      public function __construct($accessToken, $cid) {
+        $this->accessToken = $accessToken;
+        $this->cid = $cid;
+      }
+
+      public function getUser($email) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "www.classy.org/api1/donations?token=" . $this->accessToken . "&cid=" . $this->cid . "&mid=" . $mid);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        $result = curl_exec ($ch);
+        echo curl_error($ch);
+        curl_close ($ch);
+
+        global $jsonResult;
+        $jsonResult = json_decode($result, true);
+
+      }
+    }
+
+    function user_info_return( $atts ) {
+      $user_info = new UserInfo('xxx---xxx---', 'xxx---');
+      $user_info->getUser(---xxx);
+
+      global $jsonResult;
+      $user_info_parse = $jsonResult;
+      extract(shortcode_atts(array(
+        'donation' => '0',
+        'key' => 'charity_name'
+        ), $atts));
+
+      return $user_info_parse[$donation, $key];
+    }
+
+    // does this need to be short coded?
+    // is there a better way to output the values given that we are still within the function?
+
+    add_shortcode('user_info', 'user_info_return' );
+
+
+
+// echo all of this? how to out-put this loop into text on the page.
+
+    $i = 0;
+    while ( ?>[user_info donation="<?php $i ?>"] <?php != "") {
+      echo " On " ?>[user_info donation="<?php $i ?>", key="donation_date"] <?php " you gave " ?>[user_info donation="<?php $i ?>", key="donate_amount"] <?php " to " ?>[user_info donation="<?php $i ?>", key="event_name"]<?php ;
+      $i++;
+    } 
   }
 }
 
-function user_info_return( $atts ) {
-  $user_info = new UserInfo('xxx---xxx---', 'xxx---');
-  $user_info->getUser(---xxx);
-
-  global $jsonResult;
-  $user_info_parse = $jsonResult;
-  extract(shortcode_atts(array(
-    'donation' => '0',
-    'key' => 'charity_name'
-    ), $atts));
-
-  return $user_info_parse[$donation, $key];
-}
-
-add_shortcode('user_info', 'user_info_return' );
 
 ?>
 
 
 
-// thinking about how this will look.
-
-<?php
-
-$i = 0;
-
-while ( ?>[user_info donation="<?php $i ?>"] <?php != "") {
-  
-  echo " On " ?>[user_info donation="<?php $i ?>", key="donation_date"] <?php " you gave " ?>[user_info donation="<?php $i ?>", key="donate_amount"] <?php " to " ?>[user_info donation="<?php $i ?>", key="event_name"]<?php ;
-  $i++;
-
-}
-
-?>
 
 
 //return 3 values from the first donation
