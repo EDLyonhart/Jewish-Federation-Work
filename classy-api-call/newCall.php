@@ -20,11 +20,15 @@ class CampaignInfo
     $result = curl_exec ($ch);
     echo curl_error($ch);
     curl_close ($ch);
+    
+    // make 'jsonResult' available to other functions
+    add_filter( 'json_retrieve', 'json_send' )
+    function json_send ($arg = '') {
+      $jsonResult = json_decode($result, true);
+    }
 
-    global $jsonResult;
-    $jsonResult = json_decode($result, true);
-
-    if ($jsonResults['status_code'] != 'SUCCESS' {
+    // exit if no results returned
+    if ($jsonResult['status_code'] != 'SUCCESS' {
       return;
     }
 
@@ -32,11 +36,14 @@ class CampaignInfo
 }
 
 function campaign_one_return( $atts ) {
+
+  // TO DO
   // rename away from individual campaigns.
-  $campaign_client = new CampaignInfo('xxx---xxx---', 'xxx---');
+  
+  $campaign1 = new CampaignInfo('xxx---xxx---', 'xxx---');
   $campaign1->getEvent(---xxx);
 
-  global $jsonResult;
+  $jsonResult = apply_filters( 'json_send', '' );
 
   $campaign_one_parse = $jsonResult['campaigns'][0];
   extract(shortcode_atts(array(
