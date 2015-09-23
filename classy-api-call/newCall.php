@@ -43,16 +43,30 @@ function campaign_one_return( $atts ) {
   global $camp_one_total;
   global $camp_one_progress;
   
+  global $camp_two_name;
+  global $camp_two_total;
+  global $camp_two_progress;
+  
+  global $camp_three_name;
+  global $camp_three_total;
+  global $camp_three_progress;
+  
   $campaign1 = new CampaignInfo('xxx---xxx---', '---xxx');
   $campaign1->getEvent(xxx---);
 
   global $jsonResult;
+
+  /*
+  **
+  **
+  **
+  **
+  */
+  
   $campaign_one_parse = $jsonResult['campaigns'][0];
   extract(shortcode_atts(array(
     'key' => 'name'
     ), $atts));
-
-  $campaign_one_parse = $jsonResult["campaigns"][0];
   
   $camp_one_name = $campaign_one_parse["name"];
   $camp_one_total = $campaign_one_parse["total_raised"];
@@ -63,15 +77,51 @@ function campaign_one_return( $atts ) {
   }
   $camp_one = '[rockthemes_skill skill_title="' . $camp_one_name . ' - $ ' . $camp_one_total . '" skill_color="#787878" skill_bg_color="#219cab" skill_current_value="' . $camp_one_progress . '%"]undefined[/rockthemes_skill]';
   print $camp_one;
+
+  /*
+  **
+  **
+  **
+  **
+
+
+  $campaign_two_parse = $jsonResult['campaigns'][1];
+  extract(shortcode_atts(array(
+    'key' => 'name'
+    ), $atts));
+  
+  $camp_two_name = $campaign_two_parse["name"];
+  $camp_two_total = $campaign_two_parse["total_raised"];
+  if ( $campaign_two_parse["goal"] < 1 ) {
+    $camp_two_progress = 100;
+  } else {
+    $camp_two_progress = ($campaign_two_parse["total_raised"]/$campaign_two_parse["goal"])*100;
+  }
+  $camp_two = '[rockthemes_skill skill_title="' . $camp_two_name . ' - $ ' . $camp_two_total . '" skill_color="#787878" skill_bg_color="#219cab" skill_current_value="' . $camp_two_progress . '%"]undefined[/rockthemes_skill]';
+  print $camp_two;
+
+  /*
+  **
+  **
+  **
+  **
+
+
+  $campaign_three_parse = $jsonResult['campaigns'][2];
+  extract(shortcode_atts(array(
+    'key' => 'name'
+    ), $atts));
+  
+  $camp_three_name = $campaign_three_parse["name"];
+  $camp_three_total = $campaign_three_parse["total_raised"];
+  if ( $campaign_three_parse["goal"] < 1 ) {
+    $camp_three_progress = 100;
+  } else {
+    $camp_three_progress = ($campaign_three_parse["total_raised"]/$campaign_three_parse["goal"])*100;
+  }
+  $camp_three = '[rockthemes_skill skill_title="' . $camp_three_name . ' - $ ' . $camp_three_total . '" skill_color="#787878" skill_bg_color="#219cab" skill_current_value="' . $camp_three_progress . '%"]undefined[/rockthemes_skill]';
+  print $camp_three;
 }
-
-/*
-
-Here is what the shotcodes will look like this:
-
-[campaign_one key="name"]
-[campaign_one key="total_raised"]
-[campaign_one key="goal"]
 
 */
 
