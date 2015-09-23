@@ -1,5 +1,10 @@
 <?php
 
+/*
+** Classy API calls
+**
+*/
+
 class CampaignInfo
 {
 
@@ -21,23 +26,28 @@ class CampaignInfo
     echo curl_error($ch);
     curl_close ($ch);
 
-    
-    // make 'jsonResult' available to other functions
-    add_filter( 'json_retrieve', 'json_send' )
-    function json_send ($arg = '') {
-      $jsonResult = json_decode($result, true);
-    }
-
+    global $jsonResult;
+    $jsonResult = json_decode($result, true);
 
     // exit if no results returned
-    if ($jsonResult['status_code'] != 'SUCCESS' {
+    if ($jsonResult['status_code'] != 'SUCCESS') {
       return;
     }
 
   }
 }
 
-function campaign_one_return( $atts ) {
+
+/*
+**
+** Campaign One!
+**
+*/
+
+function instantiate_campaigns( $atts ) {
+  
+  $campaign1 = new CampaignInfo('xxx---xxx---', '---xxx');
+  $campaign1->getEvent(---xxx);
 
   global $camp_one_name;
   global $camp_one_total;
@@ -50,16 +60,14 @@ function campaign_one_return( $atts ) {
   global $camp_three_name;
   global $camp_three_total;
   global $camp_three_progress;
-  
-  $campaign1 = new CampaignInfo('xxx---xxx---', '---xxx');
-  $campaign1->getEvent(xxx---);
 
   global $jsonResult;
 
   /*
+  ** First Campaign
   **
-  **
-  **
+  **  To set up, go to: www.classy.org/api1/campaigns?token= xxx---xxx--- &cid= ---xxx
+  **  Select which campaign you want to display and put its index into "$campaign_one_parse = $jsonResult['campaigns'][ < HERE > ];"
   **
   */
   
@@ -79,9 +87,10 @@ function campaign_one_return( $atts ) {
   print $camp_one;
 
   /*
+  ** Second Campaign
   **
-  **
-  **
+  **  To set up, go to: www.classy.org/api1/campaigns?token= xxx---xxx--- &cid= ---xxx
+  **  Select which campaign you want to display and put its index into "$campaign_one_parse = $jsonResult['campaigns'][ < HERE > ];"
   **
 
 
@@ -101,9 +110,10 @@ function campaign_one_return( $atts ) {
   print $camp_two;
 
   /*
+  ** Third Campaign
   **
-  **
-  **
+  **  To set up, go to: www.classy.org/api1/campaigns?token= xxx---xxx--- &cid= ---xxx
+  **  Select which campaign you want to display and put its index into "$campaign_one_parse = $jsonResult['campaigns'][ < HERE > ];"
   **
 
 
@@ -121,9 +131,9 @@ function campaign_one_return( $atts ) {
   }
   $camp_three = '[rockthemes_skill skill_title="' . $camp_three_name . ' - $ ' . $camp_three_total . '" skill_color="#787878" skill_bg_color="#219cab" skill_current_value="' . $camp_three_progress . '%"]undefined[/rockthemes_skill]';
   print $camp_three;
-}
-
 */
+  
+}
 
 ?>
 
